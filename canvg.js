@@ -2975,6 +2975,27 @@
 				if (svg.opts['ignoreClear'] != true) {
 					ctx.clearRect(0, 0, cWidth, cHeight);
 				}
+
+				// get device resolution
+				var pixelRatio = (function () {
+					var ctx = document.createElement("canvas").getContext("2d"),
+				    	    dpr = window.devicePixelRatio || 1,
+                            	    	    bsr = ctx.webkitBackingStorePixelRatio ||
+						  ctx.mozBackingStorePixelRatio ||
+						  ctx.msBackingStorePixelRatio ||
+						  ctx.oBackingStorePixelRatio ||
+						  ctx.backingStorePixelRatio || 1;
+
+				        return dpr / bsr;
+			    	})();
+
+			    	// scale the canvas to make high resolution
+				ctx.canvas.width *= pixelRatio;
+				ctx.canvas.height *= pixelRatio;
+
+				// re-scale everything to make it normal draw
+				ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+
 				e.render(ctx);
 				if (isFirstRender) {
 					isFirstRender = false;
